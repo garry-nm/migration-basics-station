@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-apn=iot.1nce.net
+apn=iot.melita.io
 version="0.5"
 
 # Platform
@@ -28,7 +28,7 @@ while [ $# -gt 0 ]; do
         -h | --help)
             echo "Usage: $0 [options]"
             echo "Options:"
-            echo "  --apn <apn>           Set the APN to use (default: iot.1nce.net)"
+            echo "  --apn <apn>           Set the APN to use (default: iot.melita.io)"
             echo "  -v, --version         Display latest config version"
             echo "  -h, --help            Display this help"
             exit 0
@@ -96,7 +96,7 @@ uci commit lora
 uci import basicstation < /dev/null
 uci set basicstation.config=settings
 uci set basicstation.config.mode='cups'
-uci set basicstation.config.type='boot'
+uci set basicstation.config.type='regular'
 uci set basicstation.config.protocol='https'
 uci set basicstation.config.srvAddress="$platform"
 uci set basicstation.config.srvPort='443'
