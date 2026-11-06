@@ -103,8 +103,11 @@ uci set basicstation.config.srvPort='443'
 uci set basicstation.config.srvUri="https://$platform:443"
 uci set basicstation.config.gwAuthMode='disabled'
 uci commit basicstation
-echo "https://$platform:443" > /app/basicstation/cups-boot.uri
-curl --fail --silent --insecure --output /app/basicstation/cups-boot.trust https://www.amazontrust.com/repository/AmazonRootCA1.pem
+echo "https://$platform:443" > /app/basicstation/cups.uri
+curl --fail --silent --insecure --output /app/basicstation/cups.trust https://www.amazontrust.com/repository/AmazonRootCA1.pem
+mkdir -p /app/certs_n_configs
+cp /app/basicstation/cups.trust /app/certs_n_configs/user_cups.trust
+chmod 755 /app/certs_n_configs/user_cups.trust
 log_result "OK"
 
 if [ "$update_network" -eq 1 ]; then
