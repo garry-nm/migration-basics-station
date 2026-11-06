@@ -82,7 +82,7 @@ if [ -z "$fw_version_major" ] || [ -z "$fw_version_minor" ] || [ -z "$fw_version
     exit 4
 # Temporarily remove the minimal version requirement. What is the reason for requiring >= 1.2.55?
 #elif [ "$fw_version_major" -eq 1 ] && [ "$fw_version_minor" -eq 2 ] && [ "$fw_version_patch" -ge 55 ]; then
-elif [ "$fw_version_major" -eq 1 ] && [ "$fw_version_minor" -ge 1 ] && [ "$fw_version_patch" -ge 53 ]; then
+elif [ "$fw_version_major" -ge 1 ] && [ "$fw_version_minor" -ge 1 ] && [ "$fw_version_patch" -ge 1 ]; then
     log_result "OK ($fw_version)"
 else
     log_result "unsupported firmware version ($fw_version), install cancelled"
