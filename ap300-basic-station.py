@@ -189,6 +189,72 @@ def stop_app(app_name):
     return app_id
 
 
+def remove_app(app_name):
+    """
+    Find the application's current AppId, remove it,
+    and verify that it is no longer installed.
+
+    Equivalent to:
+
+        app-manager --command remove --appid <AppId>
+    """
+
+    app = find_app(app_name)
+
+    app_id = app.get("AppId")
+    app_status = app.get("status", "UNKNOWN")
+
+    if not app_id:
+        raise RuntimeError(
+            f"Application '{app_name}' does not have an AppId"
+        )
+
+    print(
+        f"Found application: "
+        f"AppName={app_name}, "
+        f"AppId={app_id}, "
+        f"status={app_status}"
+    )
+
+    print(
+        f"Removing application '{app_name}' "
+        f"with AppId '{app_id}'..."
+    )
+
+    remove_output = run_command(
+        [
+            "app-manager",
+            "--command",
+            "remove",
+            "--appid",
+            app_id,
+        ]
+    )
+
+    if remove_output.strip():
+        print(remove_output.strip())
+
+    # -----------------------------------------------------
+    # Verify application has actually been removed
+    # -----------------------------------------------------
+
+    apps = get_installed_apps()
+
+    for installed_app in apps:
+        if installed_app.get("AppId") == app_id:
+            raise RuntimeError(
+                f"Application '{app_name}' "
+                f"(AppId={app_id}) was not removed"
+            )
+
+    print(
+        f"Application '{app_name}' "
+        f"(AppId={app_id}) successfully removed."
+    )
+
+    return app_id
+
+
 def main():
 
     # ---------------------------------------------------------
@@ -474,18 +540,18 @@ def main():
         print("\nGateway configuration saved and applied successfully.")
 
         # -----------------------------------------------------
-        # 15. Find and stop the Netmore application
+        # 15. Find and remove the Netmore application
         # -----------------------------------------------------
 
         print(
             f"\nChecking application '{APP_NAME}'..."
         )
 
-        app_id = stop_app(APP_NAME)
+        app_id = remove_app(APP_NAME)
 
         print(
             f"\nApplication '{APP_NAME}' "
-            f"(AppId={app_id}) is STOPPED."
+            f"(AppId={app_id}) is REMOVED."
         )
 
     # ---------------------------------------------------------
